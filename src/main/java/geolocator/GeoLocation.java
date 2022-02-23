@@ -1,8 +1,15 @@
 package geolocator;
 
+/**
+ * Using GeoLocation class, it can tell you where you are,
+ * using your IP address
+ */
 @lombok.Data
 public class GeoLocation {
 
+    /**
+     * This field represents the AS
+     */
     private String as;
     private String city;
     private String country;

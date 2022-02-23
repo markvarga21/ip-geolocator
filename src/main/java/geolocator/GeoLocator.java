@@ -5,6 +5,11 @@ import feign.Param;
 import feign.RequestLine;
 import feign.jackson.JacksonDecoder;
 
+/**
+ * This is a JavaDoc documentation about GeoLocator interface
+ * @author Gipsz Jakap
+ * @since jdk-17
+ */
 public interface GeoLocator {
 
     @RequestLine("GET")

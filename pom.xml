@@ -36,7 +36,7 @@
 <!--            <scope>compile</scope>-->
 <!--        </dependency>-->
 
-
+<!--        Konstruktorokat, gettereket, settereket csinal adott osztaly field-ekhez -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -44,9 +44,97 @@
             <scope>compile</scope>
         </dependency>
 
+<!--        Egy nem hasznalt fuggoseg, amit kiir a mvn dependency:analyze plugin-->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.0.1-jre</version>
+        </dependency>
+<!--        Ez a fuggoseg egy biztonsagi res lesz a projectunkben -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.17.0</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
+<!--            A Javadoc dokumentációt tartalmazó JAR állomány létrehozása a package életciklus fázisban:-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-javadoc-plugin</artifactId>-->
+<!--                <version>3.3.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>attach-javadoc</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>jar</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
+<!--            A forrás JAR állomány létrehozása a package életciklus fázisban:-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+<!--            Ez a plugin ellenorzi a biztonsagi reseket a szoftverunkben -->
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>6.5.3</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.9.0</version>
+            </plugin>
+
+<!--            Mivel ez itt van, nem fog warningot dobni az mvn dependency:analyze plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                <ignoredDependencies>
+<!--                    Ezek amugy warningok lennenek a mvn dependency:analyze plugin alapjan, viszont igy ignore-oljuk oket -->
+                    <ignoredDependency>org.projectlombok:lombok</ignoredDependency>
+                    <ignoredDependency>com.google.guava:guava</ignoredDependency>
+                    <ignoredDependency>io.github.openfeign:feign-core</ignoredDependency>
+                </ignoredDependencies>
+                </configuration>
+            </plugin>
+<!--            Dunno ezek mik - TODO -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
+            <plugin>
+                <groupId>fr.jcgay.maven.plugins</groupId>
+                <artifactId>buildplan-maven-plugin</artifactId>
+                <version>1.5</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -60,7 +148,7 @@
                     <mainClass>${mainClass}</mainClass>
                 </configuration>
             </plugin>
-<!--
+
             <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
@@ -74,7 +162,7 @@
                     </execution>
                 </executions>
             </plugin>
--->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
